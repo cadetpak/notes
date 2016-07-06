@@ -1,0 +1,30 @@
+<h3>Welcome <%= @user.first_name %>, to your Note'd Page!</h3>
+
+<div id="create_note">
+  <form action='/create' method='post'>
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+    <input type='text' name='note'/>
+    <input type='hidden' name='user' value='<%= @user.id %>'>
+    <br>
+    <button type="submit">Add Note</button>
+  </form>
+</div> 
+
+<% @note.each_slice(1) do |note| %>
+  <div class="note">
+  	<% note.each do |n| %>
+  	  Note'd on: <%= n.created_at.strftime("%D %H:%M") %>
+  	  <br>
+  	  <%= n.note %>
+  	  <hr>
+  	  <div class="actions"> 
+  	    <form action="/<%= n.id %>" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <!-- NOTE the _method delete, which allows verb DELETE to be used instead of Post which conflicts with restful routes -->
+          <input type="hidden" name="_method" value="delete">
+          <input type="submit" value="Delete">
+        </form>
+  	  </div> 
+  	<% end %> 
+  </div>
+<% end %> 
